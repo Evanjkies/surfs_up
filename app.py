@@ -6,7 +6,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, jsonify
-engine = create_engine("sqlite:///hawaii.sqlite")
+engine = create_engine("sqlite:///hawaii.sqlite?check_same_thread=False")   
 Base = automap_base()
 Base.prepare(engine, reflect=True)
 Measurement = Base.classes.measurement
@@ -30,11 +30,11 @@ def welcome():
 # Needed to create a dictionary with the date as the key a precipiation as the values. Had to jsonify the the dictionary as well
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
-    precipitation = session.query(Measurement.date, Measurement.prcp).\
-        filter(Measurement.date >= prev_year).all()
-    precip = {date: prcp for date, prcp in precipitation}
-    return jsonify(precip)
+   prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+   precipitation = session.query(Measurement.date, Measurement.prcp).\
+    filter(Measurement.date >= prev_year).all()
+   precip = {date: prcp for date, prcp in precipitation}
+   return jsonify(precip)
 # Establishing a stations route
 @app.route("/api/v1.0/stations")
 def stations():
